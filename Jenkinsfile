@@ -50,6 +50,32 @@ pipeline {
 				sh "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
+
+		stage('Package') { // will create the jar file, and the jar file will be used to build docker image.
+			steps {
+				echo "Maven Package"
+				sh "mvn package -DskipTests"
+			}
+		}
+
+		stage('Build Docker Image'){
+			steps{
+				//docker build -t anooha2020/currency-exchange-jenkins-devops-pipeline:$env.BUILD_TAG .
+				script{
+					dockerImage = docker.Build("anooha2020/currency-exchange-jenkins-devops-pipeline:${env.BUILD_TAG}")
+				}
+			}
+		}
+		stage('Push Docker Image'){
+			steps{
+				script{
+					docker.withRegistry('', 'dockerHub'){ // first parameter leaf empty because dockerHub is default repository
+						dockerImage.Push();
+						dockerImage.push('latest');
+					}
+				}
+			}
+		}
 	} 
 	post {
 		always{
