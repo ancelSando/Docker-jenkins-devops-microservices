@@ -62,7 +62,7 @@ pipeline {
 			steps{
 				//docker build -t anooha2020/currency-exchange-jenkins-devops-pipeline:$env.BUILD_TAG .
 				script{
-					dockerImage = docker.Build("anooha2020/currency-exchange-jenkins-devops-pipeline:${env.BUILD_TAG}")
+					dockerImage = docker.build("anooha2020/currency-exchange-jenkins-devops-pipeline:${env.BUILD_TAG}")
 				}
 			}
 		}
@@ -70,7 +70,7 @@ pipeline {
 			steps{
 				script{
 					docker.withRegistry('', 'dockerHub'){ // first parameter leaf empty because dockerHub is default repository
-						dockerImage.Push();
+						dockerImage.push();
 						dockerImage.push('latest');
 					}
 				}
