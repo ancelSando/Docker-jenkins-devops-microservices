@@ -26,7 +26,7 @@ pipeline {
 	stages {
 		stage('Checkout') {
 			steps {
-				echo "Build"
+				echo "Tool Checkout"
 				sh 'mvn --version'
 				sh 'docker version'
 			}
